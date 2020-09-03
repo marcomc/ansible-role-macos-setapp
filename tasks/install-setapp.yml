@@ -1,0 +1,32 @@
+---
+- name: Make sure Setapp is installed.
+  homebrew_cask:
+    name: setapp
+    state: present
+    accept_external_apps: yes
+
+- name: Get the name of the Setapp Installer
+  shell: brew cask info setapp | grep Installer | sed -e "s/ (/_/g" | cut -d "_" -f1
+  register: installer_name
+  changed_when: false
+
+- name: Get the basedir of the Setapp Installer
+  shell: brew cask info setapp | grep Caskroom | sed -e "s/ (/_/g" | cut -d "_" -f1
+  register: installer_path
+  changed_when: false
+
+- name: Define the full Setapp Installer path
+  set_fact:
+    setapp_installer_path: "{{ installer_path.stdout }}/{{ installer_name.stdout }}"
+  when: installer_name is defined and installer_name.rc ==0 and installer_path is defined and installer_path.rc ==0
+  changed_when: false
+
+- name: Remove Setapp Installer from Quarantine
+  command: xattr -d com.apple.quarantine "{{ setapp_installer_path }}"
+  when: setapp_installer_path is defined and setapp_installer_path != ""
+
+- name: Launch Setapp Installer
+  command: open "{{ setapp_installer_path }}"
+  when: setapp_installer_path is defined and setapp_installer_path != ""
+  changed_when: false
+  ignore_errors: yes

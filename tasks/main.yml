@@ -1,0 +1,6 @@
+- name: FATAL
+  fail: msg="This role is only compatible with macOS"
+  when: ansible_facts['os_family'] != 'Darwin'
+
+- include: install-setapp.yml
+  when: ansible_facts['os_family'] == 'Darwin'
