@@ -1,5 +1,5 @@
 # Ansible role to install SetApp application store
-Installs SetApp application store via homebrew, removes it from quarantine and launch it.
+Installs [SetApp](https://setapp.com/) application store via homebrew, removes it from quarantine and launch it.
 
 Once it's launched the user can install all its favourite apps from SetApp.
 
