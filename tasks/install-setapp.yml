@@ -6,13 +6,21 @@
     accept_external_apps: yes
 
 - name: Get the name of the Setapp Installer
-  shell: brew cask info setapp | grep Installer | sed -e "s/ (/_/g" | cut -d "_" -f1
+  shell: >
+    set -o pipefail && \
+    brew cask info setapp | grep Installer | sed -e "s/ (/_/g" | cut -d "_" -f1
   register: installer_name
+  args:
+    executable: /bin/bash
   changed_when: false
 
 - name: Get the basedir of the Setapp Installer
-  shell: brew cask info setapp | grep Caskroom | sed -e "s/ (/_/g" | cut -d "_" -f1
+  shell:  >
+    set -o pipefail && \
+    brew cask info setapp | grep Caskroom | sed -e "s/ (/_/g" | cut -d "_" -f1
   register: installer_path
+  args:
+    executable: /bin/bash
   changed_when: false
 
 - name: Define the full Setapp Installer path
