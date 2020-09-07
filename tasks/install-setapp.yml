@@ -23,10 +23,10 @@
 
 - name: Remove Setapp Installer from Quarantine
   command: xattr -d com.apple.quarantine "{{ setapp_installer_path }}"
-  when: setapp_installer_path is defined and setapp_installer_path != ""
+  when: setapp_installer_path is defined and setapp_installer_path | length > 0
 
 - name: Launch Setapp Installer
   command: open "{{ setapp_installer_path }}"
-  when: setapp_installer_path is defined and setapp_installer_path != ""
+  when: setapp_installer_path is defined and setapp_installer_path | length > 0
   changed_when: false
   ignore_errors: yes
