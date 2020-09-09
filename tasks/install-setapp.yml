@@ -4,6 +4,29 @@
     name: setapp
     state: present
     accept_external_apps: yes
+  notify: Add Setup to Dock
+
+- name: Add Setapp dir to Dock
+  osx_defaults:
+    domain: 'com.apple.dock'
+    key: 'persistent-others'
+    type: array
+    array_add: yes
+    value: "[ '<dict>
+                <key>tile-type</key><string>{{ item.type }}-tile</string>
+                <key>tile-data</key>
+                  <dict>
+                    <key>file-data</key><dict>
+                    <key>_CFURLString</key><string>file://{{ item.path }}</string>
+                    <key>_CFURLStringType</key><integer>15</integer>
+                  </dict>
+                </dict>
+              </dict>' ]"
+  loop:
+    - { path: "~/Applications/Setapp", type: 'directory' }
+  become: "{{ target_user_id != ansible_user_id }}"
+  become_user: "{{ target_user_id }}"
+  notify: Restart Dock
 
 - name: Get the name of the Setapp Installer
   shell: >

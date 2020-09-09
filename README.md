@@ -23,7 +23,12 @@ For example
 
 ## Variables
 
-No variable required.
+### Target User: `target_user_id`
+Used in case you want to link the `Setapp` dir to another user `Dock`.
+
+    target_user_id: "{{ ansible_user_id }}" # Options
+
+By defaults it add it to the current user's Dock.
 
 ## Continuous integration
 This role has (not yet) a travis basic test (for github) only.
