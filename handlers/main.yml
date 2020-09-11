@@ -2,4 +2,4 @@
 - name: Restart Dock
   command: killall Dock
   ignore_errors: yes
-  when: "{{ target_user_id == ansible_user_id }}"
+  when: target_user_id == ansible_user_id
