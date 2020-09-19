@@ -3,6 +3,7 @@ galaxy_info:
   author: Marco Massari Calderone
   description: Ansible role to install and launch SetApp application store
   license: MIT
+  role_name: macos_setapp
   min_ansible_version: 2.0
   platforms:
     - name: macOS

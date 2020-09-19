@@ -19,7 +19,7 @@ For example
 
     - host: all
       roles:
-        - marcomc.setapp
+        - marcomc.macos_setapp
 
 ## Variables
 
