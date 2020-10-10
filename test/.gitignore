@@ -58,5 +58,3 @@ target/
 
 # Vagrant
 .vagrant
-
-sophos_endpoint/*
