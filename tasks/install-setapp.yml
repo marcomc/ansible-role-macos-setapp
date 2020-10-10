@@ -5,13 +5,12 @@
     state: present
     accept_external_apps: yes
   register: setapp_installation
-  notify: Add Setup to Dock
 
 - name: setapp_installation
   debug:
     var: setapp_installation
   when: verbose|bool
-  
+
 - name: Setup Setapp if it has been freshly installed
   block:
   - name: Add Setapp dir to Dock
