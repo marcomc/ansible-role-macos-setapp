@@ -3,7 +3,9 @@
 # Ansible role to install SetApp application store
 Installs [SetApp](https://setapp.com/) application store via homebrew, removes it from quarantine and launch it.
 
-Once it's launched the user can install all its favourite apps from SetApp.
+Once it's launched the user can install all its 'favourite' apps from SetApp.
+
+Used in [Splinter, an opinionated provisioning tool for macOS](https://github.com/marcomc/splinter).
 
 ## (Soft) Requirements & Dependencies
 * [Jeff Geerling](https://github.com/geerlingguy)'s' [geerlingguy.homebrew](https://github.com/geerlingguy/ansible-role-homebrew) which is defined as Ansible Galaxy dependency
