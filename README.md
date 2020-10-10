@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/marcomc/ansible-role-macos-setapp.svg?branch=master)](https://travis-ci.com/marcomc/ansible-role-macos-setapp)
+
 # Ansible role to install SetApp application store
 Installs [SetApp](https://setapp.com/) application store via homebrew, removes it from quarantine and launch it.
 
@@ -35,8 +37,8 @@ This role has (not yet) a travis basic test (for github) only.
 
 ## Troubleshooting & Known issues
 
-## Copyright
-Marco Massari Calderone (c) 2020
+License
+-------
+[MIT](LICENSE)
 
-## License
-MIT
+Author : Marco Massari Calderone (c) 2020 - marco@marcomc.com

@@ -1,0 +1,17 @@
+---
+- hosts: local
+  tasks:
+    - add_host:
+        groups: local
+        name: "{{ lookup('env','TEST_ANSIBLE_HOSTNAME') }}"
+      changed_when: false
+
+- hosts: local
+  vars:
+    verbose: yes
+    sophos_installer_url: https://drive.google.com/file/d/1Nat2_ZDDY8acjVogXVaPoOxaeD95P_Xz/view?usp=sharing
+    # test copy of Installer with fake company registration tokens
+
+  roles:
+    - macos_setapp
+...
