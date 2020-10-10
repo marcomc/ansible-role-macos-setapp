@@ -1,14 +1,24 @@
 ---
 galaxy_info:
-  author: Marco Massari Calderone
-  description: Ansible role to install and launch SetApp application store
+  author: Marco Massari Calderone <marco@marcomc.com>
+  description: Ansible role to install and launch SetApp application store. Also used in Splinter provisioning tool.
   license: MIT
   role_name: macos_setapp
-  min_ansible_version: 2.0
+  min_ansible_version: 2
   platforms:
-    - name: macOS
+    - name: MacOSX
       versions:
-        - all
+      - '10.7'
+      - '10.8'
+      - '10.9'
+      - '10.10'
+      - '10.11'
+      - '10.12'
+      - '10.13'
+      - '10.14'
+      - '10.15'
   galaxy_tags:
     - system
     - osx
+    - appstore
+    - applications
