@@ -4,60 +4,73 @@
     name: setapp
     state: present
     accept_external_apps: yes
+  register: setapp_installation
   notify: Add Setup to Dock
 
-- name: Add Setapp dir to Dock
-  osx_defaults:
-    domain: 'com.apple.dock'
-    key: 'persistent-others'
-    type: array
-    array_add: yes
-    value: "[ '<dict>
-                <key>tile-type</key><string>{{ item.type }}-tile</string>
-                <key>tile-data</key>
-                  <dict>
-                    <key>file-data</key><dict>
-                    <key>_CFURLString</key><string>file://{{ item.path }}</string>
-                    <key>_CFURLStringType</key><integer>15</integer>
+- name: setapp_installation
+  debug:
+    var: setapp_installation
+  when: verbose|bool
+  
+- name: Setup Setapp if it has been freshly installed
+  block:
+  - name: Add Setapp dir to Dock
+    osx_defaults:
+      domain: 'com.apple.dock'
+      key: 'persistent-others'
+      type: array
+      array_add: yes
+      value: "[ '<dict>
+                  <key>tile-type</key><string>{{ item.type }}-tile</string>
+                  <key>tile-data</key>
+                    <dict>
+                      <key>file-data</key><dict>
+                      <key>_CFURLString</key><string>file://{{ item.path }}</string>
+                      <key>_CFURLStringType</key><integer>15</integer>
+                    </dict>
                   </dict>
-                </dict>
-              </dict>' ]"
-  loop:
-    - { path: "~/Applications/Setapp", type: 'directory' }
-  become: "{{ target_user_id != ansible_user_id }}"
-  become_user: "{{ target_user_id }}"
-  notify: Restart Dock
+                </dict>' ]"
+    loop:
+      - { path: "~/Applications/Setapp", type: 'directory' }
+    become: "{{ target_user_id != ansible_user_id }}"
+    become_user: "{{ target_user_id }}"
+    notify: Restart Dock
 
-- name: Get the name of the Setapp Installer
-  shell: >
-    set -o pipefail && \
-    brew cask info setapp | grep Installer | sed -e "s/ (/_/g" | cut -d "_" -f1
-  register: installer_name
-  args:
-    executable: /bin/bash
-  changed_when: false
+  - name: Get the name of the Setapp Installer
+    shell: >
+      set -o pipefail && \
+      brew cask info setapp | grep Installer | sed -e "s/ (/_/g" | cut -d "_" -f1
+    register: installer_name
+    args:
+      executable: /bin/bash
+    changed_when: false
 
-- name: Get the basedir of the Setapp Installer
-  shell:  >
-    set -o pipefail && \
-    brew cask info setapp | grep Caskroom | sed -e "s/ (/_/g" | cut -d "_" -f1
-  register: installer_path
-  args:
-    executable: /bin/bash
-  changed_when: false
+  - name: Get the basedir of the Setapp Installer
+    shell:  >
+      set -o pipefail && \
+      brew cask info setapp | grep Caskroom | sed -e "s/ (/_/g" | cut -d "_" -f1
+    register: installer_path
+    args:
+      executable: /bin/bash
+    changed_when: false
 
-- name: Define the full Setapp Installer path
-  set_fact:
-    setapp_installer_path: "{{ installer_path.stdout }}/{{ installer_name.stdout }}"
-  when: installer_name is defined and installer_name.rc ==0 and installer_path is defined and installer_path.rc ==0
-  changed_when: false
+  - name: Define the full Setapp Installer path
+    set_fact:
+      setapp_installer_path: "{{ installer_path.stdout }}/{{ installer_name.stdout }}"
+    when: installer_name is defined and installer_name.rc ==0 and installer_path is defined and installer_path.rc ==0
+    changed_when: false
 
-- name: Remove Setapp Installer from Quarantine
-  command: xattr -d com.apple.quarantine "{{ setapp_installer_path }}"
-  when: setapp_installer_path is defined and setapp_installer_path | length > 0
+  - name: Remove Setapp Installer from Quarantine
+    command: xattr -d com.apple.quarantine "{{ setapp_installer_path }}"
+    when: setapp_installer_path is defined and setapp_installer_path | length > 0
 
-- name: Launch Setapp Installer
-  command: open "{{ setapp_installer_path }}"
-  when: setapp_installer_path is defined and setapp_installer_path | length > 0
-  changed_when: false
-  ignore_errors: yes
+  - name: Launch Setapp Installer
+    command: open "{{ setapp_installer_path }}"
+    when:
+      - setapp_installer_path is defined
+      - setapp_installer_path | length > 0
+      - target_user_id == ansible_user_id
+    changed_when: false
+    ignore_errors: yes
+  # end block
+  when: setapp_installation.changed
